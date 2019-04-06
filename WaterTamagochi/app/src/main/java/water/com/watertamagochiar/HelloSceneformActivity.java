@@ -28,10 +28,15 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.PixelCopy;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -39,6 +44,7 @@ import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.ArSceneView;
 import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
@@ -81,11 +87,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.IntBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import timber.log.Timber;
+import water.com.watertamagochiar.screens.common.main.MainActivity;
 import water.com.watertamagochiar.utils.Screenshot;
 import com.google.ar.sceneform.rendering.AnimationData;
 
@@ -141,6 +150,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
         mShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                takePhoto();
             }
         });
         snapCreativeKitApi = SnapCreative.getApi(this);
@@ -251,5 +261,99 @@ public class HelloSceneformActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private String generateFilename() {
+        String date =
+                new SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.getDefault()).format(new Date());
+        return Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES) + File.separator + "Sceneform/" + date + "_screenshot.jpg";
+    }
+
+    private void saveBitmapToDisk(Bitmap bitmap, String filename) throws IOException {
+
+        File out = new File(filename);
+        if (!out.getParentFile().exists()) {
+            out.getParentFile().mkdirs();
+        }
+        try (FileOutputStream outputStream = new FileOutputStream(filename);
+             ByteArrayOutputStream outputData = new ByteArrayOutputStream()) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputData);
+            outputData.writeTo(outputStream);
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException ex) {
+            throw new IOException("Failed to save bitmap to disk", ex);
+        }
+    }
+
+    private void takePhoto() {
+        final String filename = generateFilename();
+        ArSceneView view = arFragment.getArSceneView();
+
+        // Create a bitmap the size of the scene view.
+        final Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        // Create a handler thread to offload the processing of the image.
+        final HandlerThread handlerThread = new HandlerThread("PixelCopier");
+        handlerThread.start();
+        // Make the request to copy.
+        PixelCopy.request(view, bitmap, (copyResult) -> {
+            if (copyResult == PixelCopy.SUCCESS) {
+                try {
+                    saveBitmapToDisk(bitmap, filename);
+                } catch (IOException e) {
+                    Toast toast = Toast.makeText(HelloSceneformActivity.this, e.toString(),
+                            Toast.LENGTH_LONG);
+                    toast.show();
+                    return;
+                }
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                        "Photo saved", Snackbar.LENGTH_LONG);
+                snackbar.setAction("Open in Photos", v -> {
+                    File photoFile = new File(filename);
+
+//                    Uri photoURI = FileProvider.getUriForFile(HelloSceneformActivity.this,
+//                            "com.water.fileprovider",
+//                            photoFile);
+
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, photoURI);
+//                    intent.setDataAndType(photoURI, "image/*");
+//                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                    startActivity(intent);
+                    sendToSnapchat(photoFile);
+
+                });
+                snackbar.show();
+            } else {
+                Toast toast = Toast.makeText(HelloSceneformActivity.this,
+                        "Failed to copyPixels: " + copyResult, Toast.LENGTH_LONG);
+                toast.show();
+            }
+            handlerThread.quitSafely();
+        }, new Handler(handlerThread.getLooper()));
+    }
+
+    private void sendToSnapchat(File imageFile) {
+        Timber.d("photo Returned");
+        SnapMediaFactory snapMediaFactory = SnapCreative.getMediaFactory(this);
+        if(imageFile != null) {
+            SnapPhotoFile photoFile;
+            try {
+                photoFile = snapMediaFactory.getSnapPhotoFromFile(imageFile);
+            } catch (SnapMediaSizeException e) {
+                e.printStackTrace();
+                return;
+            }
+            SnapPhotoContent snapPhotoContent = new SnapPhotoContent(photoFile);
+            snapPhotoContent.setCaptionText("Look at my healthy forest");
+//            snapPhotoContent.setAttachmentUrl("www.google.com");
+
+            snapCreativeKitApi.send(snapPhotoContent);
+            Timber.d("Photo sent to snapchat");
+        } else {
+            Timber.d("Imagefile was Null");
+        }
     }
 }
