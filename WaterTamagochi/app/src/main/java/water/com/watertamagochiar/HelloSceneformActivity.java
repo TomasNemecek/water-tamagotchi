@@ -34,106 +34,125 @@ import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
-import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
-import com.google.ar.sceneform.ux.ScaleController;
-import com.google.ar.sceneform.ux.TransformableNode;
 import com.google.ar.sceneform.animation.ModelAnimator;
-import android.content.res.ColorStateList;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Toast;
-import com.google.ar.core.Anchor;
-import com.google.ar.core.HitResult;
-import com.google.ar.core.Plane;
-import com.google.ar.sceneform.AnchorNode;
-import com.google.ar.sceneform.FrameTime;
-import com.google.ar.sceneform.Node;
-import com.google.ar.sceneform.SkeletonNode;
-import com.google.ar.sceneform.animation.ModelAnimator;
-import com.google.ar.sceneform.math.Quaternion;
-import com.google.ar.sceneform.math.Vector3;
+
 import com.google.ar.sceneform.rendering.AnimationData;
-import com.google.ar.sceneform.rendering.ModelRenderable;
-import com.google.ar.sceneform.ux.ArFragment;
+
+
+import java.util.LinkedList;
+
+import water.com.watertamagochiar.model.GridManager;
+import water.com.watertamagochiar.model.Tree;
+import water.com.watertamagochiar.model.TreeObject;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
  */
 public class HelloSceneformActivity extends AppCompatActivity {
 
+    public GridManager gridMan;
+
+    public LinkedList<TreeObject> treeObjects = new LinkedList<>();
+
     // Controls animation playback.
     private ModelAnimator animator;
     // Index of the current animation playing.
-    private int walkAnimationIndex = 3;
+    private final int walkAnimationIndex = 3;
 
-  private static final String TAG = HelloSceneformActivity.class.getSimpleName();
-  private static final double MIN_OPENGL_VERSION = 3.0;
+    private static final String TAG = HelloSceneformActivity.class.getSimpleName();
+    private static final double MIN_OPENGL_VERSION = 3.0;
 
-  private ArFragment arFragment;
+    private ArFragment arFragment;
     private ModelRenderable foxRenderable;
+    private ModelRenderable treeRenderable;
 
-  public static void startActivity(Activity startingActivity) {
-      Intent intent = new Intent(startingActivity, HelloSceneformActivity.class);
-      startingActivity.startActivity(intent);
-  }
-
-  @Override
-  @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
-  // CompletableFuture requires api level 24
-  // FutureReturnValueIgnored is not valid
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    if (!checkIsSupportedDeviceOrFinish(this)) {
-      return;
+    public static void startActivity(Activity startingActivity) {
+        Intent intent = new Intent(startingActivity, HelloSceneformActivity.class);
+        startingActivity.startActivity(intent);
     }
 
-    setContentView(R.layout.activity_ux);
-    arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+    @Override
+    @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
+    // CompletableFuture requires api level 24
+    // FutureReturnValueIgnored is not valid
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    // When you build a Renderable, Sceneform loads its resources in the background while returning
-    // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
-    ModelRenderable.builder()
-        .setSource(this, Uri.parse("fox.sfb"))
-        .build()
-        .thenAccept(renderable -> foxRenderable = renderable)
-        .exceptionally(
-            throwable -> {
-              Toast toast =
-                  Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
-              toast.setGravity(Gravity.CENTER, 0, 0);
-              toast.show();
-              return null;
-            });
-
-    arFragment.setOnTapArPlaneListener(
-        (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-          if (foxRenderable == null) {
+        if (!checkIsSupportedDeviceOrFinish(this)) {
             return;
-          }
+        }
 
-          // Create the Anchor.
-          Anchor anchor = hitResult.createAnchor();
-          AnchorNode anchorNode = new AnchorNode(anchor);
-          anchorNode.setParent(arFragment.getArSceneView().getScene());
+        setContentView(R.layout.activity_ux);
+        arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
-          // Create the transformable andy and add it to the anchor.
-          AnchorNode fox = new AnchorNode();
-          fox.setLocalScale(new Vector3(0.1f, 0.1f, 0.1f));
-          fox.setParent(anchorNode);
-          fox.setRenderable(foxRenderable);
+        // When you build a Renderable, Sceneform loads its resources in the background while returning
+        // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
+        ModelRenderable.builder()
+                .setSource(this, Uri.parse("fox.sfb"))
+                .build()
+                .thenAccept(renderable -> foxRenderable = renderable)
+                .exceptionally(
+                        throwable -> {
+                            Toast toast =
+                                    Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            return null;
+                        });
 
-          onPlayAnimation();
-        });
-  }
+        ModelRenderable.builder()
+                .setSource(this, Uri.parse("Tree1.sfb"))
+                .build()
+                .thenAccept(renderable -> treeRenderable = renderable)
+                .exceptionally(
+                        throwable -> {
+                            Toast toast =
+                                    Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            return null;
+                        });
+
+        arFragment.setOnTapArPlaneListener(
+                (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
+                    if (foxRenderable == null || treeRenderable == null) {
+                        return;
+                    }
+
+
+
+                    // Create the Anchor.
+                    Anchor anchor = hitResult.createAnchor();
+                    AnchorNode anchorNode = new AnchorNode(anchor);
+                    anchorNode.setParent(arFragment.getArSceneView().getScene());
+
+
+                    Tree[] treesToImport = new Tree[]{
+                            new Tree(1, 1, 10),
+                            new Tree(1, 2, 7),
+                            new Tree(1, 3, 4),
+                            new Tree(1, 4, 1)
+                    };
+
+                    gridMan = new GridManager(anchorNode, treeRenderable, foxRenderable, treesToImport);
+
+
+                    // Create the transformable andy and add it to the anchor.
+   /*                 AnchorNode fox = new AnchorNode();
+                    fox.setLocalScale(foxSize.scaled(globalScaleMultiplier));
+                    fox.setParent(anchorNode);
+                    fox.setRenderable(foxRenderable);
+
+                    onPlayAnimation();*/
+
+
+
+
+
+                });
+    }
 
 
     private void onPlayAnimation() { //View unusedView
@@ -147,33 +166,32 @@ public class HelloSceneformActivity extends AppCompatActivity {
     }
 
 
-
-  /**
-   * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
-   * on this device.
-   *
-   * <p>Sceneform requires Android N on the device as well as OpenGL 3.0 capabilities.
-   *
-   * <p>Finishes the activity if Sceneform can not run
-   */
-  public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
-    if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
-      Log.e(TAG, "Sceneform requires Android N or later");
-      Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
-      activity.finish();
-      return false;
+    /**
+     * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
+     * on this device.
+     *
+     * <p>Sceneform requires Android N on the device as well as OpenGL 3.0 capabilities.
+     *
+     * <p>Finishes the activity if Sceneform can not run
+     */
+    public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
+        if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
+            Log.e(TAG, "Sceneform requires Android N or later");
+            Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
+            activity.finish();
+            return false;
+        }
+        String openGlVersionString =
+                ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE))
+                        .getDeviceConfigurationInfo()
+                        .getGlEsVersion();
+        if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
+            Log.e(TAG, "Sceneform requires OpenGL ES 3.0 later");
+            Toast.makeText(activity, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG)
+                    .show();
+            activity.finish();
+            return false;
+        }
+        return true;
     }
-    String openGlVersionString =
-        ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE))
-            .getDeviceConfigurationInfo()
-            .getGlEsVersion();
-    if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
-      Log.e(TAG, "Sceneform requires OpenGL ES 3.0 later");
-      Toast.makeText(activity, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG)
-          .show();
-      activity.finish();
-      return false;
-    }
-    return true;
-  }
 }

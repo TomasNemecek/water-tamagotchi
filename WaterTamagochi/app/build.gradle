@@ -65,3 +65,9 @@ sceneform.asset('sampledata/fox.fbx',
         'default',
         'sampledata/fox.sfa',
         'src/main/assets/fox')
+
+
+sceneform.asset('sampledata/Tree1.fbx',
+        'default',
+        'sampledata/Tree1.sfa',
+        'src/main/assets/Tree1')
