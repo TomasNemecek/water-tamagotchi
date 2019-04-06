@@ -19,27 +19,34 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.content.Intent;
+import android.opengl.GLES20;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.ScaleController;
 import com.google.ar.sceneform.ux.TransformableNode;
 import com.google.ar.sceneform.animation.ModelAnimator;
+
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -50,6 +57,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+
 import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
@@ -63,6 +71,24 @@ import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.AnimationData;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
+import com.snapchat.kit.sdk.SnapCreative;
+import com.snapchat.kit.sdk.creative.api.SnapCreativeKitApi;
+import com.snapchat.kit.sdk.creative.exceptions.SnapMediaSizeException;
+import com.snapchat.kit.sdk.creative.media.SnapMediaFactory;
+import com.snapchat.kit.sdk.creative.media.SnapPhotoFile;
+import com.snapchat.kit.sdk.creative.models.SnapPhotoContent;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.IntBuffer;
+import java.util.List;
+
+import javax.microedition.khronos.opengles.GL10;
+
+import timber.log.Timber;
+import water.com.watertamagochiar.utils.Screenshot;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
@@ -74,66 +100,78 @@ public class HelloSceneformActivity extends AppCompatActivity {
     // Index of the current animation playing.
     private int walkAnimationIndex = 3;
 
-  private static final String TAG = HelloSceneformActivity.class.getSimpleName();
-  private static final double MIN_OPENGL_VERSION = 3.0;
+    private static final String TAG = HelloSceneformActivity.class.getSimpleName();
+    private static final double MIN_OPENGL_VERSION = 3.0;
 
-  private ArFragment arFragment;
+    SnapCreativeKitApi snapCreativeKitApi;
+
+    private ArFragment arFragment;
     private ModelRenderable foxRenderable;
+    private FloatingActionButton mShare;
 
-  public static void startActivity(Activity startingActivity) {
-      Intent intent = new Intent(startingActivity, HelloSceneformActivity.class);
-      startingActivity.startActivity(intent);
-  }
-
-  @Override
-  @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
-  // CompletableFuture requires api level 24
-  // FutureReturnValueIgnored is not valid
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    if (!checkIsSupportedDeviceOrFinish(this)) {
-      return;
+    public static void startActivity(Activity startingActivity) {
+        Intent intent = new Intent(startingActivity, HelloSceneformActivity.class);
+        startingActivity.startActivity(intent);
     }
 
-    setContentView(R.layout.activity_ux);
-    arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+    @Override
+    @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
+    // CompletableFuture requires api level 24
+    // FutureReturnValueIgnored is not valid
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    // When you build a Renderable, Sceneform loads its resources in the background while returning
-    // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
-    ModelRenderable.builder()
-        .setSource(this, Uri.parse("fox.sfb"))
-        .build()
-        .thenAccept(renderable -> foxRenderable = renderable)
-        .exceptionally(
-            throwable -> {
-              Toast toast =
-                  Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
-              toast.setGravity(Gravity.CENTER, 0, 0);
-              toast.show();
-              return null;
-            });
-
-    arFragment.setOnTapArPlaneListener(
-        (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-          if (foxRenderable == null) {
+        if (!checkIsSupportedDeviceOrFinish(this)) {
             return;
-          }
+        }
 
-          // Create the Anchor.
-          Anchor anchor = hitResult.createAnchor();
-          AnchorNode anchorNode = new AnchorNode(anchor);
-          anchorNode.setParent(arFragment.getArSceneView().getScene());
-
-          // Create the transformable andy and add it to the anchor.
-          AnchorNode fox = new AnchorNode();
-          fox.setLocalScale(new Vector3(0.1f, 0.1f, 0.1f));
-          fox.setParent(anchorNode);
-          fox.setRenderable(foxRenderable);
-
-          onPlayAnimation();
+        setContentView(R.layout.activity_ux);
+        arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+        mShare = findViewById(R.id.snap_fab);
+        mShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
         });
-  }
+        snapCreativeKitApi = SnapCreative.getApi(this);
+
+        // When you build a Renderable, Sceneform loads its resources in the background while returning
+        // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
+        ModelRenderable.builder()
+                .setSource(this, Uri.parse("fox.sfb"))
+                .build()
+                .thenAccept(renderable -> foxRenderable = renderable)
+                .exceptionally(
+                        throwable -> {
+                            Toast toast =
+                                    Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            return null;
+                        });
+
+        arFragment.setOnTapArPlaneListener(
+                (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
+                    if (foxRenderable == null) {
+                        return;
+                    }
+
+                    // Create the Anchor.
+                    Anchor anchor = hitResult.createAnchor();
+                    AnchorNode anchorNode = new AnchorNode(anchor);
+                    anchorNode.setParent(arFragment.getArSceneView().getScene());
+
+                    // Create the transformable andy and add it to the anchor.
+                    AnchorNode fox = new AnchorNode();
+                    fox.setLocalScale(new Vector3(0.1f, 0.1f, 0.1f));
+                    fox.setParent(anchorNode);
+                    fox.setRenderable(foxRenderable);
+
+                    onPlayAnimation();
+                });
+
+     }
+
 
 
     private void onPlayAnimation() { //View unusedView
@@ -147,33 +185,32 @@ public class HelloSceneformActivity extends AppCompatActivity {
     }
 
 
-
-  /**
-   * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
-   * on this device.
-   *
-   * <p>Sceneform requires Android N on the device as well as OpenGL 3.0 capabilities.
-   *
-   * <p>Finishes the activity if Sceneform can not run
-   */
-  public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
-    if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
-      Log.e(TAG, "Sceneform requires Android N or later");
-      Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
-      activity.finish();
-      return false;
+    /**
+     * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
+     * on this device.
+     *
+     * <p>Sceneform requires Android N on the device as well as OpenGL 3.0 capabilities.
+     *
+     * <p>Finishes the activity if Sceneform can not run
+     */
+    public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
+        if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
+            Log.e(TAG, "Sceneform requires Android N or later");
+            Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
+            activity.finish();
+            return false;
+        }
+        String openGlVersionString =
+                ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE))
+                        .getDeviceConfigurationInfo()
+                        .getGlEsVersion();
+        if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
+            Log.e(TAG, "Sceneform requires OpenGL ES 3.0 later");
+            Toast.makeText(activity, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG)
+                    .show();
+            activity.finish();
+            return false;
+        }
+        return true;
     }
-    String openGlVersionString =
-        ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE))
-            .getDeviceConfigurationInfo()
-            .getGlEsVersion();
-    if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
-      Log.e(TAG, "Sceneform requires OpenGL ES 3.0 later");
-      Toast.makeText(activity, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG)
-          .show();
-      activity.finish();
-      return false;
-    }
-    return true;
-  }
 }
