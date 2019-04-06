@@ -4,6 +4,8 @@
     package="water.com.watertamagochiar">
     <!-- Both "AR Optional" and "AR Required" apps require CAMERA permission. -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-feature android:name="android.hardware.camera.ar" />
 
     <application
@@ -31,6 +33,21 @@
             android:screenOrientation="locked"/>
 
         <meta-data android:name="com.google.ar.core" android:value="required" />
+        <meta-data
+            android:name="com.snapchat.kit.sdk.clientId"
+            android:value="5526edf7-ab57-45ad-8b61-f73c3988378d"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.easyphotopicker.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths"
+                tools:replace="android:resource"/>
+        </provider>
     </application>
 
 </manifest>

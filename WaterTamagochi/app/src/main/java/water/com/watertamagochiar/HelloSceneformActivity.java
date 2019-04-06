@@ -19,25 +19,74 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.content.Intent;
+import android.opengl.GLES20;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.Scene;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.animation.ModelAnimator;
 
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
+
+import com.google.ar.core.Anchor;
+import com.google.ar.core.HitResult;
+import com.google.ar.core.Plane;
+import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.FrameTime;
+import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.SkeletonNode;
+import com.google.ar.sceneform.animation.ModelAnimator;
+import com.google.ar.sceneform.math.Quaternion;
+import com.google.ar.sceneform.math.Vector3;
+import com.google.ar.sceneform.rendering.AnimationData;
+import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.ux.ArFragment;
+import com.snapchat.kit.sdk.SnapCreative;
+import com.snapchat.kit.sdk.creative.api.SnapCreativeKitApi;
+import com.snapchat.kit.sdk.creative.exceptions.SnapMediaSizeException;
+import com.snapchat.kit.sdk.creative.media.SnapMediaFactory;
+import com.snapchat.kit.sdk.creative.media.SnapPhotoFile;
+import com.snapchat.kit.sdk.creative.models.SnapPhotoContent;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.IntBuffer;
+import java.util.List;
+
+import javax.microedition.khronos.opengles.GL10;
+
+import timber.log.Timber;
+import water.com.watertamagochiar.utils.Screenshot;
 import com.google.ar.sceneform.rendering.AnimationData;
 
 
@@ -64,6 +113,8 @@ public class HelloSceneformActivity extends AppCompatActivity {
     private static final String TAG = HelloSceneformActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
 
+    SnapCreativeKitApi snapCreativeKitApi;
+    private FloatingActionButton mShare;
     private ArFragment arFragment;
     private ModelRenderable foxRenderable;
     private ModelRenderable treeRenderable;
@@ -86,6 +137,13 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_ux);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+        mShare = findViewById(R.id.snap_fab);
+        mShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+        snapCreativeKitApi = SnapCreative.getApi(this);
 
         // When you build a Renderable, Sceneform loads its resources in the background while returning
         // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
