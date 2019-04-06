@@ -18,6 +18,7 @@ package water.com.watertamagochiar;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -44,6 +45,11 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
   private ArFragment arFragment;
   private ModelRenderable andyRenderable;
+
+  public static void startActivity(Activity startingActivity) {
+      Intent intent = new Intent(startingActivity, HelloSceneformActivity.class);
+      startingActivity.startActivity(intent);
+  }
 
   @Override
   @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
