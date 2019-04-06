@@ -43,8 +43,6 @@ import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
-import com.google.ar.sceneform.ux.ScaleController;
-import com.google.ar.sceneform.ux.TransformableNode;
 import com.google.ar.sceneform.animation.ModelAnimator;
 
 import android.content.res.ColorStateList;
@@ -89,25 +87,37 @@ import javax.microedition.khronos.opengles.GL10;
 
 import timber.log.Timber;
 import water.com.watertamagochiar.utils.Screenshot;
+import com.google.ar.sceneform.rendering.AnimationData;
+
+
+import java.util.LinkedList;
+
+import water.com.watertamagochiar.model.GridManager;
+import water.com.watertamagochiar.model.Tree;
+import water.com.watertamagochiar.model.TreeObject;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
  */
 public class HelloSceneformActivity extends AppCompatActivity {
 
+    public GridManager gridMan;
+
+    public LinkedList<TreeObject> treeObjects = new LinkedList<>();
+
     // Controls animation playback.
     private ModelAnimator animator;
     // Index of the current animation playing.
-    private int walkAnimationIndex = 3;
+    private final int walkAnimationIndex = 3;
 
     private static final String TAG = HelloSceneformActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
 
     SnapCreativeKitApi snapCreativeKitApi;
-
+    private FloatingActionButton mShare;
     private ArFragment arFragment;
     private ModelRenderable foxRenderable;
-    private FloatingActionButton mShare;
+    private ModelRenderable treeRenderable;
 
     public static void startActivity(Activity startingActivity) {
         Intent intent = new Intent(startingActivity, HelloSceneformActivity.class);
@@ -150,28 +160,57 @@ public class HelloSceneformActivity extends AppCompatActivity {
                             return null;
                         });
 
+        ModelRenderable.builder()
+                .setSource(this, Uri.parse("Tree1.sfb"))
+                .build()
+                .thenAccept(renderable -> treeRenderable = renderable)
+                .exceptionally(
+                        throwable -> {
+                            Toast toast =
+                                    Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            return null;
+                        });
+
         arFragment.setOnTapArPlaneListener(
                 (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-                    if (foxRenderable == null) {
+                    if (foxRenderable == null || treeRenderable == null) {
                         return;
                     }
+
+
 
                     // Create the Anchor.
                     Anchor anchor = hitResult.createAnchor();
                     AnchorNode anchorNode = new AnchorNode(anchor);
                     anchorNode.setParent(arFragment.getArSceneView().getScene());
 
+
+                    Tree[] treesToImport = new Tree[]{
+                            new Tree(1, 1, 10),
+                            new Tree(1, 2, 7),
+                            new Tree(1, 3, 4),
+                            new Tree(1, 4, 1)
+                    };
+
+                    gridMan = new GridManager(anchorNode, treeRenderable, foxRenderable, treesToImport);
+
+
                     // Create the transformable andy and add it to the anchor.
-                    AnchorNode fox = new AnchorNode();
-                    fox.setLocalScale(new Vector3(0.1f, 0.1f, 0.1f));
+   /*                 AnchorNode fox = new AnchorNode();
+                    fox.setLocalScale(foxSize.scaled(globalScaleMultiplier));
                     fox.setParent(anchorNode);
                     fox.setRenderable(foxRenderable);
 
-                    onPlayAnimation();
+                    onPlayAnimation();*/
+
+
+
+
+
                 });
-
-     }
-
+    }
 
 
     private void onPlayAnimation() { //View unusedView
