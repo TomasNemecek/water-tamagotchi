@@ -18,6 +18,7 @@ package water.com.watertamagochiar;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -31,8 +32,10 @@ import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
+import com.google.ar.sceneform.ux.ScaleController;
 import com.google.ar.sceneform.ux.TransformableNode;
 
 /**
@@ -43,7 +46,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
   private static final double MIN_OPENGL_VERSION = 3.0;
 
   private ArFragment arFragment;
-  private ModelRenderable andyRenderable;
+    private ModelRenderable foxRenderable;
 
   @Override
   @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -62,9 +65,9 @@ public class HelloSceneformActivity extends AppCompatActivity {
     // When you build a Renderable, Sceneform loads its resources in the background while returning
     // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
     ModelRenderable.builder()
-        .setSource(this, R.raw.andy)
+        .setSource(this, Uri.parse("fox.sfb"))
         .build()
-        .thenAccept(renderable -> andyRenderable = renderable)
+        .thenAccept(renderable -> foxRenderable = renderable)
         .exceptionally(
             throwable -> {
               Toast toast =
@@ -76,7 +79,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
     arFragment.setOnTapArPlaneListener(
         (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-          if (andyRenderable == null) {
+          if (foxRenderable == null) {
             return;
           }
 
@@ -86,10 +89,11 @@ public class HelloSceneformActivity extends AppCompatActivity {
           anchorNode.setParent(arFragment.getArSceneView().getScene());
 
           // Create the transformable andy and add it to the anchor.
-          TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
-          andy.setParent(anchorNode);
-          andy.setRenderable(andyRenderable);
-          andy.select();
+          AnchorNode fox = new AnchorNode();
+          fox.setLocalScale(new Vector3(0.1f, 0.1f, 0.1f));
+          fox.setParent(anchorNode);
+          fox.setRenderable(foxRenderable);
+
         });
   }
 
