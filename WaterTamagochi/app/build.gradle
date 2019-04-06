@@ -43,6 +43,9 @@ dependencies {
     // Alternatively, use ArSceneView without the UX dependency.
     implementation 'com.google.ar.sceneform:core:1.8.0'
 
+    // Provides interface for animations.
+    implementation "com.google.ar.sceneform:animation:1.8.0"
+
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'

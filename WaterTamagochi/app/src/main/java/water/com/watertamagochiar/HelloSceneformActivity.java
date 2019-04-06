@@ -15,6 +15,7 @@
  */
 package water.com.watertamagochiar;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -38,11 +39,41 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.ScaleController;
 import com.google.ar.sceneform.ux.TransformableNode;
+import com.google.ar.sceneform.animation.ModelAnimator;
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
+import com.google.ar.core.Anchor;
+import com.google.ar.core.HitResult;
+import com.google.ar.core.Plane;
+import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.FrameTime;
+import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.SkeletonNode;
+import com.google.ar.sceneform.animation.ModelAnimator;
+import com.google.ar.sceneform.math.Quaternion;
+import com.google.ar.sceneform.math.Vector3;
+import com.google.ar.sceneform.rendering.AnimationData;
+import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.ux.ArFragment;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
  */
 public class HelloSceneformActivity extends AppCompatActivity {
+
+    // Controls animation playback.
+    private ModelAnimator animator;
+    // Index of the current animation playing.
+    private int walkAnimationIndex = 3;
+
   private static final String TAG = HelloSceneformActivity.class.getSimpleName();
   private static final double MIN_OPENGL_VERSION = 3.0;
 
@@ -100,8 +131,22 @@ public class HelloSceneformActivity extends AppCompatActivity {
           fox.setParent(anchorNode);
           fox.setRenderable(foxRenderable);
 
+          onPlayAnimation();
         });
   }
+
+
+    private void onPlayAnimation() { //View unusedView
+        if (animator == null || !animator.isRunning()) {
+            AnimationData data = foxRenderable.getAnimationData(walkAnimationIndex);
+            animator = new ModelAnimator(data, foxRenderable);
+            animator.setDuration(1000);
+            animator.setRepeatCount(ObjectAnimator.INFINITE);
+            animator.start();
+        }
+    }
+
+
 
   /**
    * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
