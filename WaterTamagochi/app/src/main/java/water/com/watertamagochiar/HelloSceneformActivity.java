@@ -43,6 +43,7 @@ import com.google.ar.sceneform.rendering.AnimationData;
 
 import java.util.LinkedList;
 
+import water.com.watertamagochiar.model.FoxObject;
 import water.com.watertamagochiar.model.GridManager;
 import water.com.watertamagochiar.model.Tree;
 import water.com.watertamagochiar.model.TreeObject;
@@ -59,7 +60,6 @@ public class HelloSceneformActivity extends AppCompatActivity {
     // Controls animation playback.
     private ModelAnimator animator;
     // Index of the current animation playing.
-    private final int walkAnimationIndex = 3;
 
     private static final String TAG = HelloSceneformActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
@@ -130,14 +130,16 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
 
                     Tree[] treesToImport = new Tree[]{
-                            new Tree(1, 1, 10),
+                            new Tree(1, 1, 1),
                             new Tree(1, 2, 7),
                             new Tree(1, 3, 4),
                             new Tree(1, 4, 1)
                     };
 
-                    gridMan = new GridManager(anchorNode, treeRenderable, foxRenderable, treesToImport);
+                    if (gridMan == null){
+                        gridMan = new GridManager(anchorNode, treeRenderable, foxRenderable, treesToImport);
 
+                    }
 
                     // Create the transformable andy and add it to the anchor.
    /*                 AnchorNode fox = new AnchorNode();
@@ -154,16 +156,6 @@ public class HelloSceneformActivity extends AppCompatActivity {
                 });
     }
 
-
-    private void onPlayAnimation() { //View unusedView
-        if (animator == null || !animator.isRunning()) {
-            AnimationData data = foxRenderable.getAnimationData(walkAnimationIndex);
-            animator = new ModelAnimator(data, foxRenderable);
-            animator.setDuration(1000);
-            animator.setRepeatCount(ObjectAnimator.INFINITE);
-            animator.start();
-        }
-    }
 
 
     /**
