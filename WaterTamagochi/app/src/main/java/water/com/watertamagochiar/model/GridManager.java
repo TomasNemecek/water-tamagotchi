@@ -31,6 +31,9 @@ public class GridManager {
 
         this.treeModel = treeModel;
         this.foxModel = foxModel;
+
+        // FoxObject fox = new FoxObject(foxSize, this.anchor, Vector3.zero(), foxModel);
+
     }
     public GridManager(AnchorNode anchor, ModelRenderable treeModel, ModelRenderable foxModel, Tree[] Trees){
         this(anchor, treeModel, foxModel);
