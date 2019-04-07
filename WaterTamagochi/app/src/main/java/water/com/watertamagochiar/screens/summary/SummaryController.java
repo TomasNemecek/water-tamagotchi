@@ -12,6 +12,8 @@ public class SummaryController implements SummaryViewMvc.Listener, BackPressList
     private final BackPressDispatcher mBackPressDispatcher;
     private final DialogHelper mDialogHelper;
 
+    private String text = "You are awesome! You saved 1400 liters this month, that is equivalent to ";
+
     private SummaryViewMvc mViewMvc;
 
     public SummaryController(ScreensNavigator screensNavigator, BackPressDispatcher backPressDispatcher, DialogHelper dialogHelper) {
@@ -39,17 +41,32 @@ public class SummaryController implements SummaryViewMvc.Listener, BackPressList
 
     @Override
     public void onShowerClicked() {
-        mDialogHelper.showAlertDecreaseShower();
+        mViewMvc.setText("An average 5 minute shower uses 6 liters of water per minute. Your showers this month took on average 17.5 minutes. Every minute counts!");
     }
 
     @Override
     public void onDishesClicked() {
-        mDialogHelper.showAlertDecreaseDishwashing();
+        mViewMvc.setText("An average dishwasher load uses 15 liters of water. You used your dishwasher 12 times this month. Every dish counts!");
     }
 
     @Override
     public void onLaundryClicked() {
-        mDialogHelper.showAlertDecreaseWashingMachine();
+        mViewMvc.setText("An average laundry machine load uses 75 liters of water. You used your dishwasher 6 times this month. Every load counts!");
+    }
+
+    @Override
+    public void onAppleClicked() {
+        mViewMvc.setText(text + " 6 Apples ");
+    }
+
+    @Override
+    public void onCricketClicked() {
+        mViewMvc.setText(text + " 7,5 Million Grasshoppers ");
+    }
+
+    @Override
+    public void onChickenClicked() {
+        mViewMvc.setText(text + " 3 chicken legs ");
     }
 
     @Override

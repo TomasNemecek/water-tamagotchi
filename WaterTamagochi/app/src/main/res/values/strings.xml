@@ -4,9 +4,9 @@
     <string name="general_error">An error occurred</string>
 
 
-    <string name="daily_title">Daily</string>
-    <string name="weekly_title">Weekly</string>
-    <string name="summary_title">Summary</string>
+    <string name="daily_title">Today\'s water usage</string>
+    <string name="weekly_title">Weekly water usage</string>
+    <string name="summary_title">Monthly water usage</string>
     <string name="forrest_title">My Forrest</string>
 
     <string name="daily">Daily Consumption</string>
