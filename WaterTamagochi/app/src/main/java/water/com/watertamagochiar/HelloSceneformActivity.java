@@ -88,6 +88,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.IntBuffer;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -293,12 +294,17 @@ public class HelloSceneformActivity extends AppCompatActivity {
         return true;
     }
 
+//    private String generateFilename() {
+//        String date =
+//                new SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.getDefault()).format(new Date());
+//        return Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_PICTURES) + File.separator + "Sceneform/" + date + "_screenshot.jpg";
+//    }
     private String generateFilename() {
-        String date =
-                new SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.getDefault()).format(new Date());
         return Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES) + File.separator + "Sceneform/" + date + "_screenshot.jpg";
+                Environment.DIRECTORY_PICTURES) + "screenshot.jpg";
     }
+
 
     private void saveBitmapToDisk(Bitmap bitmap, String filename) throws IOException {
 
@@ -342,8 +348,18 @@ public class HelloSceneformActivity extends AppCompatActivity {
                 Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
                         "Photo saved", Snackbar.LENGTH_LONG);
                 snackbar.setAction("Pick photo for snapchat", v -> {
-                    EasyImage.openGallery(HelloSceneformActivity.this, 0);
-                    photoPicker = true;
+                    File photoFile = new File(filename);
+
+                    Uri photoURI = FileProvider.getUriForFile(HelloSceneformActivity.this,
+                            "com.water.fileprovider",
+                            photoFile);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, photoURI);
+                    intent.setDataAndType(photoURI, Environment.DIRECTORY_PICTURES);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(intent);
+//                    List<File> files = new ArrayList<>();
+//                    files.add(photoFile);
+//                    onPhotosReturned(files);
 
                 });
                 snackbar.show();
