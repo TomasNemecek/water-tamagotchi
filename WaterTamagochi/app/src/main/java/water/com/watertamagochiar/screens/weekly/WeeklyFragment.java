@@ -30,7 +30,6 @@ public class WeeklyFragment extends BaseFragment {
         WeeklyViewMvc viewMvc = getCompositionRoot().getViewMvcFactory().getWeeklyViewMvc(container);
         mWeeklyController = getCompositionRoot().getWeeklyController();
         mWeeklyController.bindView(viewMvc);
-
         return viewMvc.getRootView();
     }
 

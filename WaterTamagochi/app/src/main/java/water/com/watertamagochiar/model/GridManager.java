@@ -7,9 +7,9 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import java.util.Random;
 
 public class GridManager {
-    private final float gridSize = 1.5f;
-    private int gridSizeX = 12;
-    private int gridSizeY = 12;
+    private final float gridSize = 2.5f;
+    private int gridSizeX = 30;
+    private int gridSizeY = 30;
 
     private Vector3 treeSize = new Vector3(1f, 1f, 1f);
     private Vector3 foxSize = new Vector3(0.1f, 0.1f, 0.1f);

@@ -171,7 +171,8 @@ public class HelloSceneformActivity extends AppCompatActivity {
                         });
 
         ModelRenderable.builder()
-                .setSource(this, Uri.parse("Tree1.sfb"))
+//                .setSource(this, Uri.parse("Tree1.sfb"))
+                .setSource(this, Uri.parse("PineTree1.sfb"))
                 .build()
                 .thenAccept(renderable -> treeRenderable = renderable)
                 .exceptionally(
@@ -199,9 +200,18 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
                     Tree[] treesToImport = new Tree[]{
                             new Tree(1, 1, 1),
-                            new Tree(1, 2, 7),
-                            new Tree(1, 3, 4),
-                            new Tree(1, 4, 1)
+                            new Tree(3, 2, 7),
+                            new Tree(6, 3, 4),
+                            new Tree(4, 9, 10),
+                            new Tree(8, 4, 9),
+                            new Tree(10, 7, 10),
+                            new Tree(12, 8, 10),
+                            new Tree(13, 10, 10),
+                            new Tree(15, 15, 10),
+                            new Tree(18, 12, 10),
+                            new Tree(22, 17, 10),
+                            new Tree(25, 20, 10),
+                            new Tree(19, 8, 10)
                     };
 
                     if (gridMan == null){
@@ -339,7 +349,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
                 return;
             }
             SnapPhotoContent snapPhotoContent = new SnapPhotoContent(photoFile);
-            snapPhotoContent.setCaptionText("Look at my healthy forest");
+            snapPhotoContent.setCaptionText("Look at my healthy forest!");
 //            snapPhotoContent.setAttachmentUrl("www.google.com");
 
             snapCreativeKitApi.send(snapPhotoContent);
