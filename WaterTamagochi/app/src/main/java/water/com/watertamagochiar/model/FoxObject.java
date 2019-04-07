@@ -29,14 +29,13 @@ public class FoxObject extends Node {
     private float lastSpeedMultiplier = 1.0f;
 
     private ModelRenderable foxRenderable;
-    private final int walkAnimationIndex = 3;
 
 
     private Vector3 originalSize;
     private AnchorNode thisAnchorNode;
     private ModelAnimator animator;
 
-    public FoxObject(Vector3 originalSize, AnchorNode anchorPosition, Vector3 adittionalPosition, ModelRenderable foxModel){
+    public FoxObject(Vector3 originalSize, AnchorNode anchorPosition, Vector3 adittionalPosition, ModelRenderable foxModel, ModelAnimator animator, float rotationY){
         this.originalSize = originalSize;
 
 
@@ -44,28 +43,24 @@ public class FoxObject extends Node {
         fox.setLocalScale(this.originalSize.scaled(Game_Constants.globalScaleMultiplier));
         fox.setParent(anchorPosition);
         fox.setLocalPosition(adittionalPosition.scaled(Game_Constants.globalScaleMultiplier));
+        fox.setLocalRotation(new Quaternion(new Vector3(0, rotationY, 0)));
         this.thisAnchorNode = fox;
         fox.setRenderable(foxModel);
         foxRenderable = foxModel;
+        this.animator = animator;
+
+
+
         onPlayAnimation();
     }
 
-    @Override
-    public void onUpdate(FrameTime frameTime) {
-        super.onUpdate(frameTime);
 
-
-        System.out.println("RAN ONUPDATE");
-
-    }
 
     private void onPlayAnimation() {
-        if (animator == null || !animator.isRunning()) {
-            AnimationData data = foxRenderable.getAnimationData(walkAnimationIndex);
-            animator = new ModelAnimator(data, foxRenderable);
-            animator.setDuration(600);
-            animator.setRepeatCount(ObjectAnimator.INFINITE);
+
+        if(!animator.isStarted()){
             animator.start();
+
         }
     }
 

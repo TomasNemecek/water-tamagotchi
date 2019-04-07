@@ -199,19 +199,20 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
 
                     Tree[] treesToImport = new Tree[]{
-                            new Tree(1, 1, 1),
-                            new Tree(3, 2, 7),
-                            new Tree(6, 3, 4),
-                            new Tree(4, 9, 10),
-                            new Tree(8, 4, 9),
-                            new Tree(10, 7, 10),
-                            new Tree(12, 8, 10),
-                            new Tree(13, 10, 10),
-                            new Tree(15, 15, 10),
-                            new Tree(18, 12, 10),
-                            new Tree(22, 17, 10),
-                            new Tree(25, 20, 10),
-                            new Tree(19, 8, 10)
+                            new Tree(2, 1, 1),
+                            new Tree(4, 3, 7),
+                            new Tree(3, 3, 4),
+                            new Tree(1, 5, 10),
+                            new Tree(5, 6, 9),
+                            new Tree(4, 5, 10),
+                            new Tree(3, 6, 10),
+                            new Tree(1, 2, 10),
+                            new Tree(3, 1, 10),
+                            new Tree(2, 6, 10),
+                            new Tree(4, 4, 10),
+                            new Tree(5, 2, 10),
+                            new Tree(2, 1, 10),
+                            new Tree(4, 3, 10)
                     };
 
                     if (gridMan == null){

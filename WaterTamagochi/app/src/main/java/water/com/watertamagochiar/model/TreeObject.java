@@ -6,7 +6,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 
 public class TreeObject {
     private Vector3 originalSize;
-    public final float sizeToScaleToMultiplier = 0.05f;
+    public final float sizeToScaleToMultiplier = 0.003f;
     private final int increments = 10;
     private float incrementScaleAmount;
     public int currentIncrement = 0;
