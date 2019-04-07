@@ -7,6 +7,8 @@ import water.com.watertamagochiar.screens.about.AboutViewMvc;
 import water.com.watertamagochiar.screens.about.AboutViewMvcImpl;
 import water.com.watertamagochiar.screens.main.MainViewMvc;
 import water.com.watertamagochiar.screens.main.MainViewMvcImpl;
+import water.com.watertamagochiar.screens.summary.SummaryViewMvc;
+import water.com.watertamagochiar.screens.summary.SummaryViewMvcImpl;
 
 public class ViewMvcFactory {
 
@@ -18,6 +20,10 @@ public class ViewMvcFactory {
 
     public MainViewMvc getMainViewMvc(@Nullable ViewGroup parent) {
         return new MainViewMvcImpl(mLayoutInflater, parent, this);
+    }
+
+    public SummaryViewMvc getSummaryViewMvc(@Nullable ViewGroup parent) {
+        return new SummaryViewMvcImpl(mLayoutInflater, parent, this);
     }
 
     public AboutViewMvc getAboutViewMvc(@Nullable ViewGroup parent){

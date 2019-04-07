@@ -15,6 +15,7 @@ import water.com.watertamagochiar.screens.common.fragmentframehelper.FragmentFra
 import water.com.watertamagochiar.screens.common.screensnavigator.ScreensNavigator;
 import water.com.watertamagochiar.screens.common.toastshelper.ToastsHelper;
 import water.com.watertamagochiar.screens.main.MainController;
+import water.com.watertamagochiar.screens.summary.SummaryController;
 
 public class ControllerCompositionRoot {
 
@@ -72,6 +73,10 @@ public class ControllerCompositionRoot {
 
     public MainController getMainController(){
         return new MainController(getScreensNavigator(), getBackPressDispatcher());
+    }
+
+    public SummaryController getSummaryController(){
+        return new SummaryController(getScreensNavigator(), getBackPressDispatcher(), getDialogHelper());
     }
 
     public AboutController getAboutController(){

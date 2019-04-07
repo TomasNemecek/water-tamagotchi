@@ -37,9 +37,15 @@ public abstract class BaseNavDrawerViewMvc<ListernerType> extends BaseObservable
 //                    onDrawerItemClicked(DrawerItems.SETTINGS);
 //                } else
 //
-                 if(menuItem.getItemId() == R.id.drawer_menu_about) {
-                    onDrawerItemClicked(DrawerItems.ABOUT);
-                }
+                 if(menuItem.getItemId() == R.id.daily) {
+                    onDrawerItemClicked(DrawerItems.DAILY);
+                 } else if(menuItem.getItemId() == R.id.weekly) {
+                     onDrawerItemClicked(DrawerItems.WEEKLY);
+                 } else if(menuItem.getItemId() == R.id.summary) {
+                     onDrawerItemClicked(DrawerItems.SUMMARY);
+                 } else if(menuItem.getItemId() == R.id.forrest) {
+                     onDrawerItemClicked(DrawerItems.AR);
+                 }
                 return false;
             }
         });

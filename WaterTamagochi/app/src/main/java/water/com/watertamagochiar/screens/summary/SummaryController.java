@@ -1,24 +1,25 @@
-package water.com.watertamagochiar.screens.about;
-
+package water.com.watertamagochiar.screens.summary;
 
 import water.com.watertamagochiar.screens.common.controllers.BackPressDispatcher;
 import water.com.watertamagochiar.screens.common.controllers.BackPressListener;
+import water.com.watertamagochiar.screens.common.dialoghelper.DialogHelper;
 import water.com.watertamagochiar.screens.common.navdrawer.DrawerItems;
 import water.com.watertamagochiar.screens.common.screensnavigator.ScreensNavigator;
 
-public class AboutController implements AboutViewMvc.Listener, BackPressListener {
+public class SummaryController implements SummaryViewMvc.Listener, BackPressListener {
 
     private final ScreensNavigator mScreensNavigator;
     private final BackPressDispatcher mBackPressDispatcher;
+    private final DialogHelper mDialogHelper;
 
-    private AboutViewMvc mViewMvc;
+    private SummaryViewMvc mViewMvc;
 
-    public AboutController(ScreensNavigator screensNavigator, BackPressDispatcher backPressDispatcher) {
+    public SummaryController(ScreensNavigator screensNavigator, BackPressDispatcher backPressDispatcher, DialogHelper dialogHelper) {
         mScreensNavigator = screensNavigator;
         mBackPressDispatcher = backPressDispatcher;
+        mDialogHelper = dialogHelper;
     }
-
-    public void bindView(AboutViewMvc viewMvc){
+    public void bindView(SummaryViewMvc viewMvc){
         this.mViewMvc = viewMvc;
     }
 
@@ -37,16 +38,31 @@ public class AboutController implements AboutViewMvc.Listener, BackPressListener
     }
 
     @Override
+    public void onShowerClicked() {
+        mDialogHelper.showAlertDecreaseShower();
+    }
+
+    @Override
+    public void onDishesClicked() {
+        mDialogHelper.showAlertDecreaseDishwashing();
+    }
+
+    @Override
+    public void onLaundryClicked() {
+        mDialogHelper.showAlertDecreaseWashingMachine();
+    }
+
+    @Override
     public void onDrawerItemClicked(DrawerItems item) {
         switch (item) {
             case DAILY:
-                mViewMvc.closeDrawer();
+                mScreensNavigator.toMain();
                 break;
             case WEEKLY:
                 mScreensNavigator.toWeekly();
                 break;
             case SUMMARY:
-                mScreensNavigator.toSummary();
+                mViewMvc.closeDrawer();
                 break;
             case AR:
                 mScreensNavigator.toAR();
@@ -63,4 +79,5 @@ public class AboutController implements AboutViewMvc.Listener, BackPressListener
             return false;
         }
     }
+
 }

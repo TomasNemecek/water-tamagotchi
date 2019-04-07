@@ -15,9 +15,17 @@ public class DialogHelper {
         mContext = context;
     }
 
-//    public void showAlertUnsuccessfulConnection() {
-//        getBasicAlertDialog(mContext.getString(R.string.connection_unsuccessful), mContext.getString(R.string.check_url_port)).show();
-//    }
+    public void showAlertDecreaseShower() {
+        getBasicAlertDialog(mContext.getString(R.string.decrease_shower), mContext.getString(R.string.shower_text)).show();
+    }
+
+    public void showAlertDecreaseDishwashing() {
+        getBasicAlertDialog(mContext.getString(R.string.decrease_shower), mContext.getString(R.string.shower_text)).show();
+    }
+
+    public void showAlertDecreaseWashingMachine() {
+        getBasicAlertDialog(mContext.getString(R.string.decrease_shower), mContext.getString(R.string.shower_text)).show();
+    }
 //
 //    public void showAlertUnsuccessfulConnectionBadLogin() {
 //        getBasicAlertDialog(mContext.getString(R.string.connection_unsuccessful), mContext.getString(R.string.check_login)).show();

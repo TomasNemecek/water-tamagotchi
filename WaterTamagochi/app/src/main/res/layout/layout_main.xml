@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,14 +7,39 @@
 
     <include layout="@layout/toolbar" />
 
-    <Button
+    <!--<com.gelitenight.waveview.library.WaveView-->
+        <!--android:id="@+id/wave"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="300dp"-->
+        <!--android:layout_marginTop="32dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_margin="16dp"/>-->
+
+    <com.yangp.ypwaveview.YPWaveView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:animatorEnable="true"
+        app:textHidden="false"
+        app:shapeType="circle"
+        app:frontColor="@color/colorPrimaryLight"
+        app:behideColor="@color/colorPrimary"
+        app:borderWidthSize="0dp"
+        app:textColor="#FFFFFF"
+        app:max="1000"
+        app:progress="765"
+        app:strong="100"
+        app:shapePadding="30dp"
+        android:layout_gravity="center"/>
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_ar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AR"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="@drawable/ic_woods"
+        android:layout_gravity="end|bottom"
+        android:elevation="10dp"
+        app:elevation="10dp"
+        app:useCompatPadding="true"
+        app:backgroundTint="@color/colorPrimary"/>
 
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>

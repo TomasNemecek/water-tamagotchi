@@ -34,8 +34,7 @@ public class AboutViewMvcImpl extends BaseNavDrawerViewMvc<AboutViewMvc.Listener
     }
 
     private void initToolBar(){
-        mToolbar.addView(mToolBarViewMvc.getRootView());
-        mToolBarViewMvc.setTitle(getContext().getString(R.string.about));
+        mToolbar.addView(mToolBarViewMvc.getRootView());;
         mToolBarViewMvc.enableHamburgerButtonAndListen(new ToolBarViewMvc.HamburgerClickListener() {
             @Override
             public void onHamburgerClicked() {

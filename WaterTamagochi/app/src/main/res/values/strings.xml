@@ -3,9 +3,20 @@
 
     <string name="general_error">An error occurred</string>
 
-    <string name="about">About</string>
+
+    <string name="daily_title">Daily</string>
+    <string name="weekly_title">Weekly</string>
+    <string name="summary_title">Summary</string>
+    <string name="forrest_title">My Forrest</string>
+
+    <string name="daily">Daily Consumption</string>
+    <string name="weekly">Weekly Consumption</string>
+    <string name="summary">Summary</string>
+    <string name="forrest">My Forrest</string>
 
     <string name="version">Version</string>
     <string name="developed_by">Water Tamagochi International</string>
     <string name="application_logo">Application Logo</string>
+    <string name="decrease_shower">Decreasing Shower Time</string>
+    <string name="shower_text">An average shower consumes up to 60 litres of water. We\'ve noticed that your average shower takes about 23 minutes. Consider cutting down on your usage.</string>
 </resources>

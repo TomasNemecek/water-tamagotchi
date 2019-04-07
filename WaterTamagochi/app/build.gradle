@@ -59,6 +59,12 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
     implementation 'android.arch.lifecycle:livedata:1.1.1'
 
+    //Wave
+    implementation 'com.gelitenight.waveview:waveview:1.0.0'
+
+    //wave 2
+    implementation 'com.yangping:ypwaveview:1.0.3'
+
     //Sdk kit
     implementation([
             'com.snapchat.kit.sdk:creative:1.1.4',

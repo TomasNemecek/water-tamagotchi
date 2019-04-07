@@ -2,6 +2,7 @@ package water.com.watertamagochiar.screens.main;
 
 import water.com.watertamagochiar.screens.common.controllers.BackPressDispatcher;
 import water.com.watertamagochiar.screens.common.controllers.BackPressListener;
+import water.com.watertamagochiar.screens.common.navdrawer.DrawerItems;
 import water.com.watertamagochiar.screens.common.screensnavigator.ScreensNavigator;
 
 public class MainController implements MainViewMvc.Listener, BackPressListener {
@@ -16,7 +17,6 @@ public class MainController implements MainViewMvc.Listener, BackPressListener {
         mBackPressDispatcher = backPressDispatcher;
     }
 
-
     public void bindView(MainViewMvc viewMvc){
         this.mViewMvc = viewMvc;
     }
@@ -28,11 +28,31 @@ public class MainController implements MainViewMvc.Listener, BackPressListener {
 
     public void onResume(){
         mViewMvc.closeDrawer();
+//        mViewMvc.waveStart();
     }
 
     public void onStop(){
+//        mViewMvc.wavePause();
         mViewMvc.unregisterListener(this);
         mBackPressDispatcher.unregisterListener(this);
+    }
+
+    @Override
+    public void onDrawerItemClicked(DrawerItems item) {
+        switch (item) {
+            case DAILY:
+                mViewMvc.closeDrawer();
+                break;
+            case WEEKLY:
+                mScreensNavigator.toWeekly();
+                break;
+            case SUMMARY:
+                mScreensNavigator.toSummary();
+                break;
+            case AR:
+                mScreensNavigator.toAR();
+                break;
+        }
     }
 
     @Override

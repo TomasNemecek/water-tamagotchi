@@ -3,9 +3,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/drawer_menu_about"
-            android:icon="@drawable/ic_about"
-            android:title="@string/about"
+            android:id="@+id/daily"
+            android:title="@string/daily"
+            />
+        <item
+            android:id="@+id/weekly"
+            android:title="@string/weekly"
+            />
+        <item
+            android:id="@+id/summary"
+            android:title="@string/summary"
+            />
+        <item
+            android:id="@+id/forrest"
+            android:title="@string/forrest"
             />
     </group>
 </menu>

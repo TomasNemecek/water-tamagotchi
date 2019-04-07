@@ -1,16 +1,19 @@
-package water.com.watertamagochiar.screens.main;
+package water.com.watertamagochiar.screens.summary;
 
 import water.com.watertamagochiar.screens.common.navdrawer.DrawerItems;
 import water.com.watertamagochiar.screens.common.navdrawer.NavDrawerViewMvc;
 import water.com.watertamagochiar.screens.common.views.ObservableViewMvc;
 
-public interface MainViewMvc extends ObservableViewMvc<MainViewMvc.Listener>, NavDrawerViewMvc {
+public interface SummaryViewMvc extends ObservableViewMvc<SummaryViewMvc.Listener>, NavDrawerViewMvc {
 
     interface Listener {
         void onDrawerItemClicked(DrawerItems item);
-        void onGoToARClicked();
+
+        void onShowerClicked();
+        void onDishesClicked();
+        void onLaundryClicked();
     }
 
-    void waveStart();
-    void wavePause();
+    void setMoneySavedText(String text);
+
 }
