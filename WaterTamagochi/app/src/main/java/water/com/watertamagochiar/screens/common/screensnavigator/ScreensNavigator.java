@@ -5,6 +5,7 @@ import water.com.watertamagochiar.screens.about.AboutFragment;
 import water.com.watertamagochiar.screens.common.fragmentframehelper.FragmentFrameHelper;
 import water.com.watertamagochiar.screens.main.MainFragment;
 import water.com.watertamagochiar.screens.summary.SummaryFragment;
+import water.com.watertamagochiar.screens.weekly.WeeklyFragment;
 
 public class ScreensNavigator {
     
@@ -23,7 +24,7 @@ public class ScreensNavigator {
     }
 
     public void toWeekly() {
-
+        mFragmentFrameHelper.replaceFragment(WeeklyFragment.newInstance());
     }
 
     public void toAR() {

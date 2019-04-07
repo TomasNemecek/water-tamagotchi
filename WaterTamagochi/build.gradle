@@ -20,6 +20,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://storage.googleapis.com/snap-kit-build/maven" }
+        maven { url 'https://jitpack.io' }
     }
 }
 

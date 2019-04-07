@@ -1,0 +1,41 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:layout_marginTop="54dp">
+
+    <ImageView
+        android:id="@+id/hist"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/weeklyhist"/>
+
+    <com.yangp.ypwaveview.YPWaveView
+        android:layout_below="@id/hist"
+        android:layout_width="250dp"
+        android:layout_height="200dp"
+        app:animatorEnable="true"
+        app:textHidden="false"
+        app:shapeType="circle"
+        app:frontColor="@color/colorPrimaryLight"
+        app:behideColor="@color/colorPrimary"
+        app:borderWidthSize="0dp"
+        app:textColor="#FFFFFF"
+        app:max="1400"
+        app:progress="1050"
+        app:strong="100"
+        app:shapePadding="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"/>
+
+    </RelativeLayout>
+
+</FrameLayout>

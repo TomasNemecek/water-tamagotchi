@@ -70,6 +70,8 @@ dependencies {
             'com.snapchat.kit.sdk:creative:1.1.4',
             'com.snapchat.kit.sdk:core:1.1.4'
     ])
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 
 

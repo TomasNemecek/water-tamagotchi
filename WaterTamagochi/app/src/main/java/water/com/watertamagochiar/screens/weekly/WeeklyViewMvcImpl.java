@@ -1,4 +1,4 @@
-package water.com.watertamagochiar.screens.summary;
+package water.com.watertamagochiar.screens.weekly;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -10,15 +10,17 @@ import water.com.watertamagochiar.screens.common.ToolBarViewMvc;
 import water.com.watertamagochiar.screens.common.ViewMvcFactory;
 import water.com.watertamagochiar.screens.common.navdrawer.BaseNavDrawerViewMvc;
 import water.com.watertamagochiar.screens.common.navdrawer.DrawerItems;
+import water.com.watertamagochiar.screens.summary.SummaryViewMvc;
 
-public class SummaryViewMvcImpl extends BaseNavDrawerViewMvc<SummaryViewMvc.Listener> implements SummaryViewMvc  {
+public class WeeklyViewMvcImpl extends BaseNavDrawerViewMvc<WeeklyViewMvc.Listener> implements WeeklyViewMvc {
 
     private final ToolBarViewMvc mToolBarViewMvc;
     private final Toolbar mToolBar;
 
-    public SummaryViewMvcImpl(LayoutInflater inflater, @Nullable ViewGroup parent, ViewMvcFactory viewMvcFactory) {
+    public WeeklyViewMvcImpl(LayoutInflater inflater, @Nullable ViewGroup parent, ViewMvcFactory viewMvcFactory) {
         super(inflater, parent);
-        setRootView(inflater.inflate(R.layout.layout_summary, parent, false));
+
+        setRootView(inflater.inflate(R.layout.layout_weekly, parent, false));
 
         mToolBar = findViewById(R.id.toolbar);
         mToolBarViewMvc = viewMvcFactory.getToolBarViewMvc(mToolBar);
@@ -26,21 +28,15 @@ public class SummaryViewMvcImpl extends BaseNavDrawerViewMvc<SummaryViewMvc.List
     }
 
     private void initToolbar() {
-        mToolBarViewMvc.setTitle(getContext().getString(R.string.summary_title));
+        mToolBarViewMvc.setTitle(getContext().getString(R.string.weekly_title));
         mToolBar.addView(mToolBarViewMvc.getRootView());
         mToolBarViewMvc.enableHamburgerButtonAndListen(this::openDrawer);
     }
 
     @Override
-    public void setMoneySavedText(String text) {
-
-    }
-
-    @Override
     protected void onDrawerItemClicked(DrawerItems item) {
-        for(SummaryViewMvc.Listener listener : getListeners()) {
+        for(WeeklyViewMvc.Listener listener : getListeners()) {
             listener.onDrawerItemClicked(item);
         }
     }
-
 }
