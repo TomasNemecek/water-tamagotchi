@@ -8,6 +8,8 @@
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
     <color name="gray">#595959</color>
+    <color name="green">#c2d7aa</color>
 
     <color name="colorPrimaryDisabled">#8b96d2</color>
+    <color name="colorBtnBlue">#74FBFC</color>
 </resources>

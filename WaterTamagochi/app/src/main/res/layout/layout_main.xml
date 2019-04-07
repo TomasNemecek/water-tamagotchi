@@ -8,38 +8,41 @@
     <include layout="@layout/toolbar" />
 
     <!--<com.gelitenight.waveview.library.WaveView-->
-        <!--android:id="@+id/wave"-->
-        <!--android:layout_width="300dp"-->
-        <!--android:layout_height="300dp"-->
-        <!--android:layout_marginTop="32dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_margin="16dp"/>-->
+    <!--android:id="@+id/wave"-->
+    <!--android:layout_width="300dp"-->
+    <!--android:layout_height="300dp"-->
+    <!--android:layout_marginTop="32dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_margin="16dp"/>-->
 
     <com.yangp.ypwaveview.YPWaveView
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:layout_gravity="center"
         app:animatorEnable="true"
-        app:textHidden="false"
-        app:shapeType="circle"
-        app:frontColor="@color/colorPrimaryLight"
         app:behideColor="@color/colorPrimary"
         app:borderWidthSize="0dp"
-        app:textColor="#FFFFFF"
+        app:frontColor="@color/colorPrimaryLight"
         app:max="1000"
         app:progress="765"
-        app:strong="100"
         app:shapePadding="30dp"
-        android:layout_gravity="center"/>
+        app:shapeType="circle"
+        app:strong="100"
+        app:textColor="#FFFFFF"
+        app:textHidden="false" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_ar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_woods"
-        android:layout_gravity="end|bottom"
-        android:elevation="10dp"
-        app:elevation="10dp"
-        app:useCompatPadding="true"
-        app:backgroundTint="@color/colorPrimary"/>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_ar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:elevation="10dp"
+            android:src="@drawable/ic_woods"
+            app:backgroundTint="@color/colorPrimary"
+            app:elevation="10dp"
+            app:useCompatPadding="true" />
+
 
 </FrameLayout>

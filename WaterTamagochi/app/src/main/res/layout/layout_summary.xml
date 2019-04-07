@@ -15,167 +15,133 @@
         android:layout_marginTop="54dp">
 
         <TextView
-            android:id="@+id/txt1"
+            android:id="@+id/equivalent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="You are awesome!" />
-
-        <TextView
-            android:id="@+id/txt2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txt1"
-            android:text="The 1400 litres of water you have saved is required to produce:" />
+            android:layout_marginTop="16dp"
+            android:text="Water usage comparison"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
 
         <LinearLayout
             android:id="@+id/imgs1"
+            android:layout_below="@id/equivalent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txt2"
             android:layout_marginTop="16dp"
             android:orientation="horizontal"
             android:weightSum="3">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
+                <ImageButton
                     android:id="@+id/img_apple"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_apple" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="75dp"
+                    android:padding="15dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_apple"
+                    android:background="@color/colorPrimaryDisabled"
+                    android:scaleType="fitCenter"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:gravity="center"
-                    android:text="6 Apples" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/img_cricket"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_cricket"/>
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_cricket"
+                    android:background="@color/colorPrimaryDisabled"
+                    android:scaleType="fitCenter"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:gravity="center"
-                    android:text="7,5 Million Grasshoppers" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
+                <ImageButton
                     android:id="@+id/img_chicken"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:gravity="center"
-                    android:text="3 Chicken legs" />
-            </LinearLayout>S
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_margin="4dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/ic_chicken"
+                    android:background="@color/colorPrimaryDisabled"
+                    android:scaleType="fitCenter"/>
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/savings"
+            android:id="@+id/tips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/imgs2"
             android:layout_below="@id/imgs1"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="40dp"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="You saved 64 DKK!"
-            android:textSize="35sp" />
-
-        <TextView
-            android:id="@+id/txt3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/imgs2"
-            android:layout_marginBottom="16dp"
-            android:text="You have done great! But you can reduce your consumption even more by:" />
+            android:layout_marginTop="48dp"
+            android:text="Reduction Tips"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
 
         <LinearLayout
             android:id="@+id/imgs2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@id/tips"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
             android:orientation="horizontal"
             android:weightSum="3">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <ImageButton
+                android:id="@+id/img_shower"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/img_shower"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/ic_shower" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="75dp"
+                android:src="@drawable/ic_shower"
+                android:scaleType="fitCenter"
+                android:padding="15dp"
+                android:layout_margin="4dp"
+                android:background="@color/colorPrimaryDisabled"/>
+
+            <ImageButton
+                android:id="@+id/img_dishes"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/img_dishes"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/ic_action_name" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_dish"
+                android:padding="15dp"
+                android:layout_margin="4dp"
+                android:background="@color/colorPrimaryDisabled"/>
+
+            <ImageButton
+                android:id="@+id/img_laundry"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/img_laundry"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/ic_laundry"/>
-
-            </LinearLayout>
+                android:layout_width="0dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:padding="15dp"
+                android:src="@drawable/ic_laundry"
+                android:layout_margin="4dp"
+                android:background="@color/colorPrimaryDisabled"/>
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/text_func"
+            android:layout_width="match_parent"
+            android:layout_marginTop="48dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgs2"
+            android:padding="16dp"
+            android:textSize="18sp"
+            android:text=""
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/savings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="16dp"
+            android:text="You saved 64 DKK!"
+            android:textSize="30sp"
+            android:gravity="center"/>
     </RelativeLayout>
 </FrameLayout>

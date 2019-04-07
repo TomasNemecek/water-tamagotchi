@@ -93,6 +93,8 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
 import timber.log.Timber;
 import water.com.watertamagochiar.screens.common.main.MainActivity;
 import water.com.watertamagochiar.utils.Screenshot;
@@ -110,6 +112,8 @@ import water.com.watertamagochiar.model.TreeObject;
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
  */
 public class HelloSceneformActivity extends AppCompatActivity {
+
+    boolean photoPicker;
 
     public GridManager gridMan;
 
@@ -153,6 +157,9 @@ public class HelloSceneformActivity extends AppCompatActivity {
                 takePhoto();
             }
         });
+
+        EasyImage.configuration(this)
+                .setAllowMultiplePickInGallery(false);
         snapCreativeKitApi = SnapCreative.getApi(this);
 
         // When you build a Renderable, Sceneform loads its resources in the background while returning
@@ -237,6 +244,27 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(photoPicker) {
+            EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+                @Override
+                public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                    photoPicker = false;
+                    //Some error handling
+                }
+
+                @Override
+                public void onImagesPicked(List<File> imagesFiles, EasyImage.ImageSource source, int type) {
+                    //Handle the images
+                    photoPicker = false;
+                    onPhotosReturned(imagesFiles);
+                }
+            });
+        }
+    }
+
     /**
      * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
      * on this device.
@@ -314,18 +342,9 @@ public class HelloSceneformActivity extends AppCompatActivity {
                 }
                 Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
                         "Photo saved", Snackbar.LENGTH_LONG);
-                snackbar.setAction("Open in Photos", v -> {
-                    File photoFile = new File(filename);
-
-//                    Uri photoURI = FileProvider.getUriForFile(HelloSceneformActivity.this,
-//                            "com.water.fileprovider",
-//                            photoFile);
-
-//                    Intent intent = new Intent(Intent.ACTION_VIEW, photoURI);
-//                    intent.setDataAndType(photoURI, "image/*");
-//                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                    startActivity(intent);
-                    sendToSnapchat(photoFile);
+                snackbar.setAction("Pick photo for snapchat", v -> {
+                    EasyImage.openGallery(HelloSceneformActivity.this, 0);
+                    photoPicker = true;
 
                 });
                 snackbar.show();
@@ -338,25 +357,22 @@ public class HelloSceneformActivity extends AppCompatActivity {
         }, new Handler(handlerThread.getLooper()));
     }
 
-    private void sendToSnapchat(File imageFile) {
-        Timber.d("photo Returned");
+    private void onPhotosReturned(List<File> imageFiles) {
+        Log.d("photo Returned", "Photo returned");
         SnapMediaFactory snapMediaFactory = SnapCreative.getMediaFactory(this);
-        if(imageFile != null) {
+        if(imageFiles.size() == 1) {
             SnapPhotoFile photoFile;
             try {
-                photoFile = snapMediaFactory.getSnapPhotoFromFile(imageFile);
+                photoFile = snapMediaFactory.getSnapPhotoFromFile(imageFiles.get(0));
             } catch (SnapMediaSizeException e) {
                 e.printStackTrace();
                 return;
             }
             SnapPhotoContent snapPhotoContent = new SnapPhotoContent(photoFile);
-            snapPhotoContent.setCaptionText("Look at my healthy forest!");
-//            snapPhotoContent.setAttachmentUrl("www.google.com");
+            snapPhotoContent.setCaptionText("Sent from My Android App");
 
             snapCreativeKitApi.send(snapPhotoContent);
-            Timber.d("Photo sent to snapchat");
-        } else {
-            Timber.d("Imagefile was Null");
+            Log.d("Snapchat", "Photo sent to snapchat");
         }
     }
 }

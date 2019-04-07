@@ -12,8 +12,12 @@ public interface SummaryViewMvc extends ObservableViewMvc<SummaryViewMvc.Listene
         void onShowerClicked();
         void onDishesClicked();
         void onLaundryClicked();
+
+        void onAppleClicked();
+        void onCricketClicked();
+        void onChickenClicked();
     }
 
-    void setMoneySavedText(String text);
+    void setText(String text);
 
 }
